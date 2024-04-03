@@ -1,0 +1,4 @@
+name = "wasitafairprice"
+assets = [
+    "frontend/dist/*",
+]
