@@ -9,14 +9,22 @@ import {
 import { UserButton } from "@clerk/clerk-react";
 import { Loader } from "lucide-react";
 import useSWR from "swr";
-import { useNavigate } from 'react-router-dom';
+import { useLoaderData, Params, Link } from 'react-router-dom';
 
-export interface ItemSchema {
+export interface JudgementSchema {
+  id: number,
+  user_name: string,
+  comment: string,
+  rating: number,
+}
+
+export interface ItemFullSchema {
   id: number,
   user_name: string,
   description: string,
   price_usd: number,
   rating: number,
+  judgements: [JudgementSchema]
 }
 
 function rating_string(rating?: number) {
@@ -37,10 +45,9 @@ function rating_string(rating?: number) {
   return "Unknown rating."
 }
 
-export default function UsersTable() {
-  const { isLoading, data } = useSWR("/api/items", (url) => fetch(url).then(res => res.json()));
-
-  const navigate = useNavigate();
+function Item() {
+  const { item_id } = useLoaderData() as { item_id: number };
+  const { isLoading, data } = useSWR("/api/items/" + item_id, (url) => fetch(url).then(res => res.json()));
 
   return (
     <>
@@ -49,25 +56,21 @@ export default function UsersTable() {
       </div>
       {isLoading && <Loader className="w-4 h-4 animate-spin" />}
       {!isLoading && (
-        <div><a onClick={() => alert("Soon!")}>Soon™️: Submit a new item</a>
+        <div><Link to={"/"} >Back</Link>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Submitter</TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead>Price</TableHead>
+                <TableHead>Judge</TableHead>
+                <TableHead>Comment</TableHead>
                 <TableHead>Rating</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item: ItemSchema, i: number) => (
-                <TableRow key={i} onClick={() => navigate("/items/" + item.id)}>
+              {data.judgements.map((item: JudgementSchema, i: number) => (
+                <TableRow key={i}>
                   <TableCell>{item?.user_name}</TableCell>
-                  <TableCell>{item?.description}</TableCell>
-                  <TableCell>{item?.price_usd}</TableCell>
-                  <TableCell>{
-                    rating_string(item?.rating)
-                  }</TableCell>
+                  <TableCell>{item?.comment}</TableCell>
+                  <TableCell>{rating_string(item?.rating)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -76,4 +79,13 @@ export default function UsersTable() {
       }
     </>
   );
+}
+
+async function loader({ params }: { params: Params<"item_id"> }) {
+  return { item_id: params.item_id };
+}
+
+export {
+  Item,
+  loader,
 }

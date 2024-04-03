@@ -95,7 +95,7 @@ async fn main(
                     .service(get_users)
                     .service(get_user)
                     .service(item::get_items)
-                    .service(item::get_judgements),
+                    .service(item::get_item_full),
             )
             // serve the build files from the frontend
             .service(actix_files::Files::new("/", "./frontend/dist").index_file("index.html"))

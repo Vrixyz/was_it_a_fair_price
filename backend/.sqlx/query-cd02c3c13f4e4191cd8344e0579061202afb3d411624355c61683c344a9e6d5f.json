@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, comment, user_id, rating FROM judgements WHERE item_id = $1",
+  "query": "SELECT id, comment, user_id, rating, user_name FROM judgements WHERE item_id = $1",
   "describe": {
     "columns": [
       {
@@ -22,6 +22,11 @@
         "ordinal": 3,
         "name": "rating",
         "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "user_name",
+        "type_info": "Varchar"
       }
     ],
     "parameters": {
@@ -33,8 +38,9 @@
       false,
       false,
       false,
+      false,
       false
     ]
   },
-  "hash": "abb8b171d3e6032c9a73fc353b7a04570cfd5e83cb55a3d5e5dbfe922645da33"
+  "hash": "cd02c3c13f4e4191cd8344e0579061202afb3d411624355c61683c344a9e6d5f"
 }

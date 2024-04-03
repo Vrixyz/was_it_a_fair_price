@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT items.id, description, items.user_id, price_usd, items.user_name, AVG(rating) as rating\n        FROM items\n        JOIN judgements on judgements.item_id = items.id\n        WHERE items.id = $1\n        group by items.id;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "description",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "user_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "price_usd",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "user_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "rating",
+        "type_info": "Numeric"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "1c763410dfcc7a8b41d977bc00fef8225d8aa48c6543e88a1a76a5527cf5cfe8"
+}

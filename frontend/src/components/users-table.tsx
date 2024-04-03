@@ -20,7 +20,7 @@ export interface UserSchema {
 }
 
 export default function UsersTable() {
-  const { isLoading, data } = useSWR("/api/users", (url) => fetch(url).then(res => res.json()));
+  const { isLoading, data } = useSWR("/api/me", (url) => fetch(url).then(res => res.json()));
 
   return (
     <>
