@@ -12,7 +12,7 @@ import useSWR from "swr";
 
 export interface ItemSchema {
   description: string,
-  price: number,
+  price_usd: number,
   rating: number,
 }
 
@@ -38,7 +38,7 @@ export default function UsersTable() {
             {data.map((user: ItemSchema, i: number) => (
               <TableRow key={i}>
                 <TableCell>{user?.description}</TableCell>
-                <TableCell>{user?.price}</TableCell>
+                <TableCell>{user?.price_usd}</TableCell>
                 <TableCell>{user?.rating}</TableCell>
               </TableRow>
             ))}
