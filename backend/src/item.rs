@@ -54,7 +54,7 @@ struct ItemFull {
     pub judgements: Vec<Judgement>,
 }
 
-#[post("/")]
+#[post("/items")]
 async fn add_item(
     req: HttpRequest,
     params: web::Form<ItemNew>,
@@ -82,7 +82,11 @@ async fn add_item(
     &params.description,
     &params.price_usd,
     user_id,
-    &user.last_name.unwrap().unwrap())
+    match (&user.first_name, &user.last_name) {
+        (Some(Some(first_name)), Some(Some(last_name))) => format!("{} {}", first_name, last_name),
+        (Some(Some(only_name)), _) | (_, Some(Some(only_name))) => only_name.to_string(),
+        _ => "Unknown".to_string()
+    })
     .fetch_one(&**pool)
         .await
         .map_err(|e| {
@@ -104,7 +108,7 @@ pub async fn get_items(pool: web::Data<Pool<Postgres>>) -> impl Responder {
     let Ok(all_items) = sqlx::query!(
         r#"SELECT items.id, description, items.user_id, price_usd, items.user_name, AVG(rating) as rating
         FROM items
-        JOIN judgements on judgements.item_id = items.id group by items.id;"#)
+        LEFT JOIN judgements on judgements.item_id = items.id group by items.id;"#)
     .fetch_all(&**pool)
     .await
     else {

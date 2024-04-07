@@ -94,6 +94,7 @@ async fn main(
                     .wrap(ClerkMiddleware::new(clerk_config, None, true))
                     .service(get_users)
                     .service(get_user)
+                    .service(item::add_item)
                     .service(item::get_items)
                     .service(item::get_item_full),
             )

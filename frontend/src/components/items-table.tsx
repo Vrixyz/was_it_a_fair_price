@@ -10,6 +10,8 @@ import { UserButton } from "@clerk/clerk-react";
 import { Loader } from "lucide-react";
 import useSWR from "swr";
 import { useNavigate } from 'react-router-dom';
+import SubmitProduct from "./submit-product";
+import { useState } from "react";
 
 export interface ItemSchema {
   id: number,
@@ -42,6 +44,7 @@ export default function UsersTable() {
 
   const navigate = useNavigate();
 
+  const [isAddingNewItem, setAddingNewItem] = useState(false);
   return (
     <>
       <div className="fixed top-6 right-6">
@@ -49,7 +52,10 @@ export default function UsersTable() {
       </div>
       {isLoading && <Loader className="w-4 h-4 animate-spin" />}
       {!isLoading && (
-        <div><a onClick={() => alert("Soon!")}>Soon™️: Submit a new item</a>
+        <div><a onClick={() => { setAddingNewItem(!isAddingNewItem); }}>{(!isAddingNewItem && "Submit new Item") || "Cancel addition"}</a>
+          {
+            isAddingNewItem && SubmitProduct()
+          }
           <Table>
             <TableHeader>
               <TableRow>
